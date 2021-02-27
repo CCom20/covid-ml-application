@@ -1,0 +1,62 @@
+/* Element Styling */
+h2 {
+    padding-top: 10px;
+}
+
+/* Cards Styling */
+.card {
+    height: 175px;
+}
+/* Plotly Styling */
+#usBarChart {
+    height: 500px;
+}
+
+/* Google Calendar Chart */
+#calendarChart {
+    height: 400px;
+}
+
+/* US CASES MAP */
+#usCasesMap {
+    height: 100%;
+    width: 100%;
+    border-right: 1px solid lightgrey;
+}
+
+#LeafletMap {
+    padding-bottom: 25px;
+}
+
+/* Landing Summary Boxes */
+#landingSummary {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+
+.dataDivider {
+    margin: 25px 0px 25px 0px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    background-color: #0D527C;
+    border-radius: 5px;
+    opacity: 0.5;
+}
+
+.stateTable {
+    padding-top: 0px;
+}
+
+.thead-dark {
+    background-color: #0D527C;
+}
+
+#stateTableHeader {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-left: 10px;
+    margin-bottom: 0px;
+    background-color: #0D527C;
+    color: #fff;
+}

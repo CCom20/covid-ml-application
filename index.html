@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>US COVID-19 Dashboard</title>
+
+  <!-- Google Tag Manager -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-496WDEGHLY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-496WDEGHLY');
+  </script>
+  <!-- Cookie Alert -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Wruczek/Bootstrap-Cookie-Alert@gh-pages/cookiealert.css">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" 
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <!-- Plotly.js CDN -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <!-- Our CSS -->
+  <link rel="stylesheet" type="text/css" href="static/css/style.css">
+  <!-- RegressionJS Library -->
+  <!-- Regression functions found: https://github.com/Tom-Alexander/regression-js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/regression/2.0.1/regression.js" integrity="sha512-PHHRPMxJK1xGYLQPv9FoDbCF2X23Ao1lMAD52oLY9TBW033s4zwIXl5JQBGlfI2iOx3W1qP3LAS/MMv5Ttj0aQ==" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+  <!-- Jumbotron -->
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4">US COVID-19 Dashboard</h1>
+      <p class="lead">Created using data from the <a href="https://github.com/rearc-data/covid-19-nyt-data-in-usa">New York Times / Rearc</a>, <a href="https://datascience.nih.gov/covid-19-open-access-resources">NIH</a>, <a href="https://covid.cdc.gov/covid-data-tracker/#vaccinations">CDC</a>, and the <a href="https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html">U.S. Census Bureau</a>.</p>
+    </div>
+  </div>
+  <!-- Dashboard Header -->
+  <div class="container-sm">
+    <h1>U.S. COVID-19 Overview </h1>
+    <!-- At-A-Glance Summary -->
+    <div id="landingSummary" class="row">
+      <div class="col-lg">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Which state leads in vaccination efforts?</h5>
+            <p id="stateVaccinated" class="card-text"></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Which state has the most cases?</h5>
+            <p id="stateCases" class="card-text"></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Which state has the highest est. immunity?</h5>
+            <p id="estImmune" class="card-text"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- MAP OF US CASES -->
+    <h2>Exploratory Map of U.S.</h2>
+      <p>Explore Data Set: <select id="usChoroplet">
+        <option>Est. Percent Immune</option>
+        <option>Vaccines Distributed</option>
+        <option>Vaccines Administered</option>
+        <option>Percent Vaccinated</option>
+        <option>Deaths</option>
+        <option>Cases</option>
+      </select></p>
+    <div id="LeafletMap" >
+      <div id="usCasesMap">
+
+      </div>
+    </div>
+    <div class="dataDivider">
+    </div>
+    <!-- Correlations Chart -->
+    <div class="row">
+      <div class="col-lg-3">
+        <div>
+          <h3>Vaccinations and Cases Correlation</h3>
+          <p>Early data suggests a weak, negative correlation between the number of cases and the percentage of a state's population that has been vaccinated.</p>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div id="usScatter" >
+          <div id="usScatterPlot">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dataDivider">
+    </div>
+    <!-- Daily Cases Chart -->
+    <div class="row">
+      <div class="col-lg-3">
+        <h3>U.S. Daily Cases</h3>
+        <div class="card">
+          <div id="worstWeek" class="card-body">
+            <h5 class="card-title">Which date saw the most cases?</h5>
+            <p id="worstWeek" class="card-text"></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div id="calendarChart">
+
+        </div>
+      </div>
+    </div>
+    <!-- Filter by State -->
+    <div class="dataDivider">
+    </div>
+    <h2>Drill Down By State</h2>
+    <div>
+      <p>Select State: <select id="stateFilter"></select></p>
+    </div>
+    <!-- STATE DRILLDOWN DASHBOARD -->
+    <div>
+      <h4 id="stateTableHeader"></h4>
+    </div>
+    <!-- State Table -->
+    <div class="stateTable">
+      <table id="covidTable" class="table table-bordered table-sm table-responsive-md">
+        <thead class="theadColor">
+          <tr>
+            <th scope="col">Population</th>
+            <th scope="col">Cases</th>
+            <th scope="col">Deaths</th>
+            <th scope="col">Vaccines Distributed</th>
+            <th scope="col"> Vaccines Administered</th>
+            <th scope="col">Percent Vaccinated</th>
+            <th scope="col">Est. Percent Infected</th>
+            <th scope="col">Est. Percent Immune</th>
+          </tr>
+        </thead>
+        <tbody>
+      </table>
+    </div>
+    <!-- State Graphs -->
+    <div class="row">
+      <div class="col-lg">
+        <div id="stateTimeSeries">
+
+        </div>
+      </div>
+      <div class="col-lg">
+        <div id="stateBarChart">
+
+        </div>
+      </div>
+    </div>
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <p class="lead">Links to data sources.</p>
+      <ul>
+        <li><a href="https://github.com/rearc-data/covid-19-nyt-data-in-usa">New York Times / Rearc</a></li> 
+        <li><a href="https://datascience.nih.gov/covid-19-open-access-resources">NIH</a></li>
+        <li><a href="https://covid.cdc.gov/covid-data-tracker/#vaccinations">CDC</a></li> 
+        <li><a href="https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html">U.S. Census Bureau</a></li>
+      </ul>
+      <p>You can access some of the results here:</p>
+      <a class="btn btn-primary" href="https://ccomstock-covid-dashboard.herokuapp.com/" target="_blank" role="button">API</a>
+    </div>
+  </div>
+  <!-- COOKIE Code provided: https://github.com/Wruczek/Bootstrap-Cookie-Alert -->
+  <!-- START Bootstrap-Cookie-Alert -->
+<div class="alert text-center cookiealert" role="alert">
+  <b>Do you like cookies?</b> We use cookies to ensure you get the best experience on our website. <a href="https://cookiesandyou.com/" target="_blank">Learn more</a>
+
+  <button type="button" class="btn btn-primary btn-sm acceptcookies">
+      I agree
+  </button>
+</div>
+<!-- END Bootstrap-Cookie-Alert -->
+  <!-- Cookie -->
+  <script src="https://cdn.jsdelivr.net/gh/Wruczek/Bootstrap-Cookie-Alert@gh-pages/cookiealert.js"></script>
+  <!-- D3 JavaScript -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.3/d3.min.js"></script>
+  <!-- API key -->
+  <script type="text/javascript" src="./static/js/config.js"></script>
+  <!-- Our JavaScript -->
+  <script type="text/javascript" src="./static/js/charts.js"></script>
+  <!-- Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+
+</html>
