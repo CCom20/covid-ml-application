@@ -4,7 +4,6 @@
 
 **To-Do List**
 - [x] Automate file retrieval, cleaning, uploading to RDS with Keys
-- [ ] Read all data from API
+- [ ] Read all data from API (Heroku)
 - [ ] Recalculate Estimated Immunity based on 3, 6, and 12 month immunity
 - [ ] Use Machine Learning to project future trends
-- [ ] Deploy Full App to Heroku
