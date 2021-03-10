@@ -8,4 +8,4 @@
 - [ ] Update Dashboard with new data and visualizations
 - [x] Recalculate Estimated Immunity based on 3 and 6 month immunity
 - [x] Use Machine Learning to predict cases for missing counties
-- [x] Use stats library to predict future cases
+- [x] Create SARIMA model to predict future cases
