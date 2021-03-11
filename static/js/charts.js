@@ -1,5 +1,5 @@
 // DATA RL CONSTANTS
-const covidData = 'https://ccomstock-covid-dashboard.herokuapp.com/v1/state-overview';
+const covidData = 'https://ccomstock-covid-dashboard.herokuapp.com/v2/state-overview';
 // const nytData = "./data/nyt-master.json"
 // const dailyCases = "./data/daily_new_cases.json"
 
@@ -11,11 +11,11 @@ function atAGlance(){
 
         // console.log(data);
 
-        data.forEach(item => console.log(item.name))
+        data.forEach(item => console.log(item.state))
 
-        let state_vaccinated = data.map(item => [item.name, item.percent_vaccinated]);
-        let state_cases = data.map(item => [item.name, item.cases]);
-        let state_immune = data.map(item => [item.name, item.est_percent_immune]);
+        let state_vaccinated = data.map(item => [item.state, item.percent_vaccinated]);
+        let state_cases = data.map(item => [item.state, item.cases]);
+        let state_immune = data.map(item => [item.state, item.est_percent_immune]);
 
         // Find State - Vaccinated
         let topVaccState = "";
