@@ -9,10 +9,6 @@ function atAGlance(){
 
     d3.json(covidData, function(data) {
 
-        // console.log(data);
-
-        data.forEach(item => console.log(item.state))
-
         let state_vaccinated = data.map(item => [item.state, item.percent_vaccinated]);
         let state_cases = data.map(item => [item.state, item.cases]);
         let state_immune = data.map(item => [item.state, item.est_percent_immune]);
@@ -45,6 +41,7 @@ function atAGlance(){
         let stateImmune = "";
         let stateImmuneNum = 0;
 
+        // Find Doses per 100k
         state_immune.forEach((item) => {
             
             if (item[1] > stateImmuneNum) {
@@ -80,28 +77,19 @@ function usCasesMap(){
         else if (mapFilter === 'Deaths') {
             var mapData = data.map((item) => item.deaths)
         }
-        else if (mapFilter === 'Vaccines Distributed') {
-            var mapData = data.map((item) => item.total_distributed)
-        }
-        // else if (mapFilter === 'Est. Percent Immune') {
-        //     var mapData = data.map((item) => item.est_percent_immune)
-        // }
         else if (mapFilter === 'Percent Vaccinated') {
             var mapData = data.map((item) => item.percent_vaccinated)
         }
         else if (mapFilter === 'Vaccines Administered') {
             var mapData = data.map((item) => item.total_administered)
         }
-        // else if (mapFilter === 'Vaccines Distributed') {
-        //     var mapData = data.map((item) => item.total_distributed)
-        // }
 
         var data = [{
             type: "choroplethmapbox", 
             name: "US states",
             colorscale: [[0, "#BBDEF4"], [1, "#0D527C"]], 
             geojson: "https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json", 
-            locations: data.map((item) => item.Abb),
+            locations: data.map((item) => item.state_code),
             z: mapData,
             zmin: d3.min(mapData), 
             zmax: d3.max(mapData)
@@ -137,73 +125,69 @@ d3.json(covidData, function(data) {
     });
 });
 
-// CORRELATIONS SCATTER --- VACCINATIONS AND CASES
-function usScatter(){
+// Immunity Chart
+
+let estImmune = d3.select('#usImmunity');
+estImmune.on("change", usImmunityChart); 
+
+const stateData = "https://ccomstock-covid-dashboard.herokuapp.com/v2/daily-new-cases"
+function usImmunityChart(){
     
-    d3.json(covidData, function(data) {
+    d3.json(stateData, function(data) {
 
-        let usCases = data.map((item) => item.cases);
-        let percVacc = data.map((item) => item.percent_vaccinated);
-        let regressData = data.map((item) => [item.percent_vaccinated, item.cases]);
-        let regressDataSorted = regressData.sort((a, b) => a[0] - b[0]);
-        let regressPlot = regression.logarithmic(regressDataSorted);
+        let immuneFilter = estImmune.property("value");
 
+        if (immuneFilter === '3-Month Immunity') {
+            var immuneData = data.map((item) => item.three_month_immunity)
+        } 
+        else if (immuneFilter === '6-Month Immunity') {
+            var immuneData = data.map((item) => item.six_month_immunity)
+        }
+
+        // console.log(data.map((item) => item.three_month_immunity));
+        
         var trace1 = {
-            x: percVacc,
-            y: usCases,
-            name: "Cases & % Vaccinated Data",
-            mode: 'markers',
-            type: 'scatter',
-            text: data.map((item) => item.state),
+            x: data.map(d => d.date),
+            y: immuneData,
+            type: 'bar',
             marker: {
-                color: '#0D527C'
+                color: '#0D527C', 
+            },
+        };
+
+        console.log(trace1); 
+    
+        var estImmunityData = [trace1];
+    
+        var layout = {
+            title: `U.S. Daily Cases`,
+            xaxis: {
+                title: 'Date'
+              },
+            yaxis: {
+            title: 'Total Cases'
             }
           };
-        
-        var trace2 = {
-            x: regressPlot.points.map(item => item[0]), 
-            y: regressPlot.points.map(item => item[1]),
-            name: "Regression Model", 
-            mode: 'lines',
-            type: 'scatter',
-          };
-        
-        let layout = {
-            title: "Cases vs. Percent Vaccinated",
-            xaxis: {
-                title: "Percent Vaccinated",
-            },
-            yaxis: {
-                title: "Number of Cases"
-            },
-            legend: {
-                x: 1,
-                xanchor: 'right',
-                y: 1
-              }
-        }; 
-          
-        var data = [trace1, trace2];
 
-        var config = {responsive: true}; 
-          
-        Plotly.newPlot('usScatterPlot', data, layout, config);
+        var config = {responsive: true}
+    
+        Plotly.newPlot('usImmunityPlot', estImmunityData, layout, config);
 
     });
 };
 
-usScatter(); 
+usImmunityChart(); 
 
 // US DAILY CASES CHART
 
 function usDailyCasesSeries() {
 
-    d3.json(dailyCases, function(data) {
+    d3.json(stateData, function(data) {
 
-        console.log(data);
+        // console.log(data);
 
         var trace1 = {
-            x: data.map((item) => (item.date)),
+            x: data.map((item) => ((item.date).toLocaleString('en-US'))),
             y: data.map((item) => item.daily_new_cases),
             type: 'bar',
             marker: {
@@ -235,7 +219,7 @@ usDailyCasesSeries();
 
 // U.S. DAILY CASES --- WORST WEEK CARD
 function usDailyCases(){
-    d3.json(dailyCases, function(data){
+    d3.json(stateData, function(data){
 
         var usCases = 0;
         var worstDate = "";
@@ -248,7 +232,7 @@ function usDailyCases(){
             }
         });
 
-        var weekDate = worstDate.split(",")[0]; 
+        var weekDate = worstDate; 
 
         d3.select("#worstWeek").append("p").text(`The U.S. saw the most cases on ${weekDate}.`)
     });

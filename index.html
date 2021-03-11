@@ -63,19 +63,18 @@
           </div>
         </div>
       </div>
-      <div class="col-lg">
+      <!-- <div class="col-lg">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Out of those infected, what is the current estimated immunity for the U.S?</h5>
             <p id="estImmune" class="card-text"></p>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <!-- MAP OF US CASES -->
     <h2>Exploratory Map of U.S.</h2>
       <p>Explore Data Set: <select id="usChoroplet">
-        <option>Vaccines Distributed</option>
         <option>Vaccines Administered</option>
         <option>Percent Vaccinated</option>
         <option>Deaths</option>
@@ -92,13 +91,17 @@
     <div class="row">
       <div class="col-lg-3">
         <div>
-          <h3>Vaccinations and Cases Correlation</h3>
-          <p>Early data suggests a weak, negative correlation between the number of cases and the percentage of a state's population that has been vaccinated.</p>
+          <h3>Explore Estimated Immunity</h3>
+          <p>Estimations based on those who have had cases, and estimates a 3-month immune response and a 6-month immune response.</p>
         </div>
       </div>
       <div class="col-lg-9">
-        <div id="usScatter" >
-          <div id="usScatterPlot">
+        <div>
+          <select id="usImmunity" >
+            <option>3-Month Immunity</option>
+            <option>6-Month Immunity</option>
+          </select>
+          <div id="usImmunityPlot">
 
           </div>
         </div>
