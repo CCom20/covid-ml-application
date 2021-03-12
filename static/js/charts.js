@@ -421,13 +421,14 @@ function countyTable() {
         countyHTMLTable.html("")
         
         let countySelected = countyFilter.property('value');
-        let countyRow = countyHTMLTable.append('tr')
+        let countyRow = countyHTMLTable.append('tr');
+        let stateSelected = stateFilter.property('value');
 
         let tableHeader = d3.select("#countyTableHeader").text(`${countySelected}`)
 
         data.forEach(item => {
 
-            if (item.county == countySelected) {
+            if (item.state == stateSelected && item.county == countySelected) {
 
                 countyRow.append('td').text((item.date).toLocaleString('en-US').slice(0, 16))
                 countyRow.append('td').text((item.population_estimate).toLocaleString('en-US'))
@@ -440,7 +441,5 @@ function countyTable() {
         });
 
     });
-
-    // countyFilterFunc(); 
 
 };

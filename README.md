@@ -4,7 +4,7 @@
 
 **To-Do List**
 - [x] Automate file retrieval, cleaning, uploading to RDS with Keys
-- [ ] Read all data from API (Heroku)
+- [x] Read all data from API (Heroku)
 - [ ] Update Dashboard with new data and visualizations
 - [x] Recalculate Estimated Immunity based on 3 and 6 month immunity
 - [x] Use Machine Learning to predict cases for missing counties
