@@ -93,6 +93,8 @@
         </div>
       </div>
     </div>
+    <div class="dataDivider">
+    </div>
     <!-- MAP OF US CASES -->
     <h2>Exploratory Map of U.S.</h2>
       <p>Explore Data Set: <select id="usChoroplet">
@@ -113,7 +115,7 @@
       <div class="col-lg-3">
         <div>
           <h3>Explore Estimated Immunity</h3>
-          <p>Estimations based on those who have had cases, and estimates a 3-month immune response and a 6-month immune response.</p>
+          <p>Estimations based on those who have been infected, and estimates a 3-month immune response and a 6-month immune response.</p>
         </div>
       </div>
       <div class="col-lg-9">
@@ -127,8 +129,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="dataDivider">
     </div>
     <!-- Filter by State -->
     <div class="dataDivider">
@@ -159,6 +159,23 @@
     <h3>Drill Down By County</h3>
     <div>
       <p>Select County: <select id="countyFilter"></select></p>
+    </div>
+    <div>
+      <h4 id="countyTableHeader">Test</h4>
+    </div>
+    <div class="countyTable">
+      <table id="covidByCountyTable" class="table table-bordered table-sm table-responsive-md">
+        <thead class="theadColor">
+          <tr>
+            <th scope="col">As of</th>
+            <th scope="col">Population</th>
+            <th scope="col">Total Cases</th>
+            <th scope="col">Total Deaths</th>
+            <th scope="col">Median Household Income</th>
+          </tr>
+        </thead>
+        <tbody>
+      </table>
     </div>
     <!-- State Graphs -->
     <!-- <div class="row">

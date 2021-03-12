@@ -1,8 +1,5 @@
 // DATA RL CONSTANTS
 const covidData = 'https://ccomstock-covid-dashboard.herokuapp.com/v2/state-overview';
-// const nytData = "./data/nyt-master.json"
-// const dailyCases = "./data/daily_new_cases.json"
-
 
 // LANDING PAGE SUMMARY CARDS --- AT-A-GLANCE
 function atAGlance(){
@@ -283,90 +280,42 @@ function usDailyCases(){
 usDailyCases();
 
 // SELECT TABLE AND FILTER
-let table = d3.select("#covidTable").select("tbody")
+let stateTable = d3.select("#covidTable").select("tbody")
 let stateFilter = d3.select("#stateFilter")
+stateFilter.on("change", filteredTable);
 
-let stateOverview = "https://ccomstock-covid-dashboard.herokuapp.com/v2/state-overview"
-// STATE DRILLDOWN ---- LINE CHART
-function stateLineChart(){
-    d3.json(stateOverview, function(data){
+// function callTables() {
+//     filteredTable();
+//     countyFilterFunc();
+// };
 
-        stateFilter.on("change", stateLineChart); 
-
-        let stateSelected = stateFilter.property('value');
-
-        let stateData = data.filter(function(item){
-            return item.state == `${stateSelected}`;         
-            });
-
-        var trace1 = {
-            x: stateData.map(item => item.date),
-            y: stateData.map(item => item.cases),
-            type: 'scatter',
-            marker: {
-                color: '#0D527C', 
-            },
-        };
-
-        var timeSeriesData = [trace1];
-
-        var layout = {
-            title: `${stateSelected} Cumulitive Cases Over Time`,
-            xaxis: {
-                title: 'Date',
-                tickangle: 45
-                },
-            yaxis: {
-            title: 'Total Cases'
-            },
-            legend: {
-                x: 1,
-                xanchor: 'right',
-                y: 1
-                }
-            };
-
-        var config = {responsive: true};
-
-
-        // Plotly.newPlot('stateTimeSeries', timeSeriesData, layout, config);
-
-        // filteredTable();
-        // stateBar(); 
-
-    });
-}; 
-stateLineChart();
-
+let stateOverview = "https://ccomstock-covid-dashboard.herokuapp.com/v2/state-overview";
 let countyData = "https://ccomstock-covid-dashboard.herokuapp.com/v2/county-cases-totals";
+
 
 // COUNTY DRILLDOWN OPTIONS
 let countyFilter = d3.select("#countyFilter")
 
-d3.json(countyData, function(data) {
+function countyFilterFunc() {
+    d3.json(countyData, function(data) {
 
-    // console.log(data.map(d => d.state)); 
+        countyFilter.html("")
 
-    let stateSelected = stateFilter.property('value');
-    let countySelected = countyFilter.property('value');
-
-    let states = data.map(item => item.state)
-
-    let stateData = data.filter(function(item) {
-        return item.state == `${stateSelected}`;
-        // return console.log(item.state);         
-        }); 
-
-    if (data.state === stateSelected) {
-
-        data.forEach(item => {
-
-            countyFilter.append('option').text(item.county)
+        let stateSelected = stateFilter.property('value');
     
-        }
-
-    )};
-});
+        data.forEach(item => {
+    
+            if (item.state === stateSelected) {
+    
+                countyFilter.append('option').text(item.county)
+    
+            }
+    
+        });
+    
+    });
+};
+// countyFilterFunc(); 
 
 // COUNTY DRILLDOWN --- BAR CHART
 
@@ -428,107 +377,14 @@ function countyBar() {
      
     };
 
-
-// STATE DRILLDOWN --- BAR CHART
-// function stateBar() {
-
-//     d3.json(covidData, function(data) {
-
-//         stateSelected = stateFilter.property('value');
-
-//         stateData = data.filter(function(item){
-//             return item.state == `${stateSelected}`;         
-//             }); 
-
-//         let perVaccinated = stateData.map(item => item.percent_vaccinated);
-//         let percInfected = stateData.map(item => item.est_percent_infected_to_date);
-//         let percImmune = stateData.map(item => item.est_percent_immune);
-
-//         let xValue = [`${stateSelected}`];
-
-//         let yValue = perVaccinated;
-//         let yValue2 = percInfected;
-//         let yValue3 = percImmune; 
-
-//         var trace1 = {
-//             x: xValue,
-//             y: yValue,
-//             type: 'bar',
-//             text: yValue.map(String),
-//             textposition: 'auto',
-//             hoverinfo: 'none',
-//             name: 'Percent Vaccinated', 
-//             opacity: 0.5,
-//             marker: {
-//                 color: '#0089BA',
-//                 line: {
-//                 color: '#374955',
-//                 width: 1.5
-//                 }
-//             }
-//         };
-
-//         var trace2 = {
-//             x: xValue,
-//             y: yValue2,
-//             type: 'bar',
-//             text: yValue2.map(String),
-//             textposition: 'auto',
-//             hoverinfo: 'none',
-//             name: 'Est. Percent Infected',
-//             marker: {
-//                 color: '#374955',
-//                 line: {
-//                 color: '#374955',
-//                 width: 1.5
-//                 }
-//             }
-//         };
-
-//         var trace3 = {
-//             x: xValue,
-//             y: yValue3,
-//             type: 'bar',
-//             text: yValue3.map(String),
-//             textposition: 'auto',
-//             name: 'Est. Percent Immune',
-//             hoverinfo: 'none',
-//             marker: {
-//                 color: '#48DAA2',
-//                 line: {
-//                 color: '#374955',
-//                 width: 1.5
-//                 }
-//             }
-//         };
-
-//         var data = [trace1,trace2, trace3];
-
-//         var layout = {
-//         title: `${stateSelected} <br /> Estimated Infection, Vaccination, and Immunity`, 
-//         yaxis: {
-//             title: '% of Total State Population'
-//             },
-//             legend: {"orientation": "h"}
-//         };
-
-//         var config = {responsive: true};
-
-//         Plotly.newPlot('stateBarChart', data, layout, config);
-
-    
-//     });
- 
-// };
-
 // STATE DRILLDOWN ---- INFO TABLE
 function filteredTable() {
     d3.json(covidData, function(data) {
 
-        table.html("")
+        stateTable.html("")
         
         let stateSelected = stateFilter.property('value');
-        let stateRow = table.append('tr')
+        let stateRow = stateTable.append('tr')
 
         let tableHeader = d3.select("#stateTableHeader").text(`${stateSelected}`)
 
@@ -544,6 +400,47 @@ function filteredTable() {
 
             }; 
 
-        }); 
-    }); 
-}; 
+        });
+
+    });
+
+    countyFilterFunc();
+    countyTable();
+
+};
+filteredTable();
+
+// countyTableHeader
+let countyHTMLTable = d3.select("#covidByCountyTable").select("tbody")
+countyFilter.on("change", countyTable)
+
+// County DRILLDOWN ---- INFO TABLE
+function countyTable() {
+    d3.json(countyData, function(data) {
+
+        countyHTMLTable.html("")
+        
+        let countySelected = countyFilter.property('value');
+        let countyRow = countyHTMLTable.append('tr')
+
+        let tableHeader = d3.select("#countyTableHeader").text(`${countySelected}`)
+
+        data.forEach(item => {
+
+            if (item.county == countySelected) {
+
+                countyRow.append('td').text((item.date).toLocaleString('en-US').slice(0, 16))
+                countyRow.append('td').text((item.population_estimate).toLocaleString('en-US'))
+                countyRow.append('td').text((item.cases).toLocaleString('en-US'))
+                countyRow.append('td').text((item.deaths).toLocaleString('en-US'))
+                countyRow.append('td').text((item.median_household_income).toLocaleString('en-US'))
+
+            }; 
+
+        });
+
+    });
+
+    // countyFilterFunc(); 
+
+};
