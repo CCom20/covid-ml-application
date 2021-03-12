@@ -329,106 +329,197 @@ function stateLineChart(){
         var config = {responsive: true};
 
 
-        Plotly.newPlot('stateTimeSeries', timeSeriesData, layout, config);
+        // Plotly.newPlot('stateTimeSeries', timeSeriesData, layout, config);
 
-        filteredTable();
-        stateBar(); 
+        // filteredTable();
+        // stateBar(); 
 
     });
 }; 
 stateLineChart();
 
-// STATE DRILLDOWN --- BAR CHART
-function stateBar() {
+let countyData = "https://ccomstock-covid-dashboard.herokuapp.com/v2/county-cases-totals";
 
-    d3.json(covidData, function(data) {
+// COUNTY DRILLDOWN OPTIONS
+let countyFilter = d3.select("#countyFilter")
 
-        stateSelected = stateFilter.property('value');
+d3.json(countyData, function(data) {
 
-        stateData = data.filter(function(item){
-            return item.state == `${stateSelected}`;         
-            }); 
+    // console.log(data.map(d => d.state)); 
 
-        let perVaccinated = stateData.map(item => item.percent_vaccinated);
-        let percInfected = stateData.map(item => item.est_percent_infected_to_date);
-        let percImmune = stateData.map(item => item.est_percent_immune);
+    let stateSelected = stateFilter.property('value');
+    let countySelected = countyFilter.property('value');
 
-        let xValue = [`${stateSelected}`];
+    let states = data.map(item => item.state)
 
-        let yValue = perVaccinated;
-        let yValue2 = percInfected;
-        let yValue3 = percImmune; 
+    let stateData = data.filter(function(item) {
+        return item.state == `${stateSelected}`;
+        // return console.log(item.state);         
+        }); 
 
-        var trace1 = {
-            x: xValue,
-            y: yValue,
-            type: 'bar',
-            text: yValue.map(String),
-            textposition: 'auto',
-            hoverinfo: 'none',
-            name: 'Percent Vaccinated', 
-            opacity: 0.5,
-            marker: {
-                color: '#0089BA',
-                line: {
-                color: '#374955',
-                width: 1.5
+    if (data.state === stateSelected) {
+
+        data.forEach(item => {
+
+            countyFilter.append('option').text(item.county)
+    
+        }
+
+    )};
+});
+
+// COUNTY DRILLDOWN --- BAR CHART
+
+function countyBar() {
+
+        d3.json(countyData, function(data) {
+    
+            stateSelected = stateFilter.property('value');
+    
+            stateData = data.filter(function(item){
+                return item.state == `${stateSelected}`;         
+                }); 
+    
+            let perVaccinated = stateData.map(item => item.percent_vaccinated);
+            let percInfected = stateData.map(item => item.est_percent_infected_to_date);
+            let percImmune = stateData.map(item => item.est_percent_immune);
+    
+            let xValue = [`${stateSelected}`];
+    
+            let yValue = perVaccinated;
+            let yValue2 = percInfected;
+            let yValue3 = percImmune; 
+    
+            var trace1 = {
+                x: xValue,
+                y: yValue,
+                type: 'bar',
+                text: yValue.map(String),
+                textposition: 'auto',
+                hoverinfo: 'none',
+                name: 'Percent Vaccinated', 
+                opacity: 0.5,
+                marker: {
+                    color: '#0089BA',
+                    line: {
+                    color: '#374955',
+                    width: 1.5
+                    }
                 }
-            }
-        };
-
-        var trace2 = {
-            x: xValue,
-            y: yValue2,
-            type: 'bar',
-            text: yValue2.map(String),
-            textposition: 'auto',
-            hoverinfo: 'none',
-            name: 'Est. Percent Infected',
-            marker: {
-                color: '#374955',
-                line: {
-                color: '#374955',
-                width: 1.5
-                }
-            }
-        };
-
-        var trace3 = {
-            x: xValue,
-            y: yValue3,
-            type: 'bar',
-            text: yValue3.map(String),
-            textposition: 'auto',
-            name: 'Est. Percent Immune',
-            hoverinfo: 'none',
-            marker: {
-                color: '#48DAA2',
-                line: {
-                color: '#374955',
-                width: 1.5
-                }
-            }
-        };
-
-        var data = [trace1,trace2, trace3];
-
-        var layout = {
-        title: `${stateSelected} <br /> Estimated Infection, Vaccination, and Immunity`, 
-        yaxis: {
-            title: '% of Total State Population'
-            },
-            legend: {"orientation": "h"}
-        };
-
-        var config = {responsive: true};
-
-        Plotly.newPlot('stateBarChart', data, layout, config);
+            };
 
     
-    });
+            var data = [trace1];
+    
+            var layout = {
+            title: `${stateSelected} <br /> Estimated Infection, Vaccination, and Immunity`, 
+            yaxis: {
+                title: '% of Total State Population'
+                },
+                legend: {"orientation": "h"}
+            };
+    
+            var config = {responsive: true};
+    
+            // Plotly.newPlot('stateBarChart', data, layout, config);
+    
+        
+        });
+     
+    };
+
+
+// STATE DRILLDOWN --- BAR CHART
+// function stateBar() {
+
+//     d3.json(covidData, function(data) {
+
+//         stateSelected = stateFilter.property('value');
+
+//         stateData = data.filter(function(item){
+//             return item.state == `${stateSelected}`;         
+//             }); 
+
+//         let perVaccinated = stateData.map(item => item.percent_vaccinated);
+//         let percInfected = stateData.map(item => item.est_percent_infected_to_date);
+//         let percImmune = stateData.map(item => item.est_percent_immune);
+
+//         let xValue = [`${stateSelected}`];
+
+//         let yValue = perVaccinated;
+//         let yValue2 = percInfected;
+//         let yValue3 = percImmune; 
+
+//         var trace1 = {
+//             x: xValue,
+//             y: yValue,
+//             type: 'bar',
+//             text: yValue.map(String),
+//             textposition: 'auto',
+//             hoverinfo: 'none',
+//             name: 'Percent Vaccinated', 
+//             opacity: 0.5,
+//             marker: {
+//                 color: '#0089BA',
+//                 line: {
+//                 color: '#374955',
+//                 width: 1.5
+//                 }
+//             }
+//         };
+
+//         var trace2 = {
+//             x: xValue,
+//             y: yValue2,
+//             type: 'bar',
+//             text: yValue2.map(String),
+//             textposition: 'auto',
+//             hoverinfo: 'none',
+//             name: 'Est. Percent Infected',
+//             marker: {
+//                 color: '#374955',
+//                 line: {
+//                 color: '#374955',
+//                 width: 1.5
+//                 }
+//             }
+//         };
+
+//         var trace3 = {
+//             x: xValue,
+//             y: yValue3,
+//             type: 'bar',
+//             text: yValue3.map(String),
+//             textposition: 'auto',
+//             name: 'Est. Percent Immune',
+//             hoverinfo: 'none',
+//             marker: {
+//                 color: '#48DAA2',
+//                 line: {
+//                 color: '#374955',
+//                 width: 1.5
+//                 }
+//             }
+//         };
+
+//         var data = [trace1,trace2, trace3];
+
+//         var layout = {
+//         title: `${stateSelected} <br /> Estimated Infection, Vaccination, and Immunity`, 
+//         yaxis: {
+//             title: '% of Total State Population'
+//             },
+//             legend: {"orientation": "h"}
+//         };
+
+//         var config = {responsive: true};
+
+//         Plotly.newPlot('stateBarChart', data, layout, config);
+
+    
+//     });
  
-};
+// };
 
 // STATE DRILLDOWN ---- INFO TABLE
 function filteredTable() {
@@ -448,11 +539,8 @@ function filteredTable() {
                 stateRow.append('td').text((item.population).toLocaleString('en-US'))
                 stateRow.append('td').text((item.cases).toLocaleString('en-US'))
                 stateRow.append('td').text((item.deaths).toLocaleString('en-US'))
-                stateRow.append('td').text((item.total_distributed).toLocaleString('en-US'))
                 stateRow.append('td').text((item.total_administered).toLocaleString('en-US'))
-                stateRow.append('td').text(item.percent_vaccinated)
-                stateRow.append('td').text(item.est_percent_infected_to_date)
-                stateRow.append('td').text(item.est_percent_immune)
+                stateRow.append('td').text((item.doses_administered_per_100k).toLocaleString('en-US'))
 
             }; 
 
