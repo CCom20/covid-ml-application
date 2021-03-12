@@ -406,9 +406,46 @@ function filteredTable() {
 
     countyFilterFunc();
     countyTable();
+    stateScatter();
 
 };
 filteredTable();
+
+// STATE SCATTER PLOT
+// function stateScatter() {
+//     d3.json(countyData, function(data) {
+
+//         let stateSelected = stateFilter.property('value');
+
+//         data.forEach(item => {
+
+//             if (item.state == stateSelected) {
+
+//                 var trace1 = {
+//                     x: item.median_household_income,
+//                     y: item.cases,
+//                     mode: 'markers',
+//                     type: 'scatter',
+//                     name: 'Team A',
+//                     text: item.county,
+//                     marker: { size: 12 }
+//                 };
+                
+              
+//                 var data = [ trace1 ];
+                
+//                 var layout = {
+//                     title:'Median Household Income and Cases by County'
+//                 };
+
+//         }
+          
+//         Plotly.newPlot('stateScatterPlot', data, layout);
+
+//     });
+// })};
+
+// stateScatter();
 
 // countyTableHeader
 let countyHTMLTable = d3.select("#covidByCountyTable").select("tbody")
@@ -441,5 +478,4 @@ function countyTable() {
         });
 
     });
-
 };
