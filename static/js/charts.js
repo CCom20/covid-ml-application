@@ -330,14 +330,10 @@ function countyBar() {
                 }); 
     
             let perVaccinated = stateData.map(item => item.percent_vaccinated);
-            let percInfected = stateData.map(item => item.est_percent_infected_to_date);
-            let percImmune = stateData.map(item => item.est_percent_immune);
     
             let xValue = [`${stateSelected}`];
     
             let yValue = perVaccinated;
-            let yValue2 = percInfected;
-            let yValue3 = percImmune; 
     
             var trace1 = {
                 x: xValue,
@@ -412,48 +408,54 @@ function filteredTable() {
 filteredTable();
 
 // STATE SCATTER PLOT
-// function stateScatter() {
-//     d3.json(countyData, function(data) {
+function stateScatter() {
+    d3.json(countyData, function(data) {
 
-//         let stateSelected = stateFilter.property('value');
+        let stateSelected = stateFilter.property('value');
 
-//         data.forEach(item => {
+        let stateData = data.filter(function(item){
+            return item.state == `${stateSelected}`;         
+            });
 
-//             if (item.state == stateSelected) {
+        let x = stateData.map(item => item.median_household_income);
 
-//                 var trace1 = {
-//                     x: item.median_household_income,
-//                     y: item.cases,
-//                     mode: 'markers',
-//                     type: 'scatter',
-//                     name: 'Team A',
-//                     text: item.county,
-//                     marker: { size: 12 }
-//                 };
-                
-              
-//                 var data = [ trace1 ];
-                
-//                 var layout = {
-//                     title:'Median Household Income and Cases by County'
-//                 };
+        // console.log(x);
 
-//         }
+        var trace1 = {
+                    x: stateData.map(item => item.median_household_income),
+                    y: stateData.map(item => item.cases),
+                    mode: 'markers',
+                    type: 'scatter',
+                    name: 'Team A',
+                    text: stateData.map(item => item.county),
+                    marker: { size: 12 }
+                };
+                    
+                  
+        var data = [ trace1 ];
+        
+        var layout = {
+            title:'Median Household Income and Cases by County'
+        };
           
-//         Plotly.newPlot('stateScatterPlot', data, layout);
+        Plotly.newPlot('stateScatterPlot', data, layout);
 
-//     });
-// })};
+    });
+};
 
 // stateScatter();
 
 // countyTableHeader
 let countyHTMLTable = d3.select("#covidByCountyTable").select("tbody")
+countyTable();
+
 countyFilter.on("change", countyTable)
 
 // County DRILLDOWN ---- INFO TABLE
 function countyTable() {
     d3.json(countyData, function(data) {
+
+        let countyHTMLTable = d3.select("#covidByCountyTable").select("tbody");
 
         countyHTMLTable.html("")
         
@@ -463,9 +465,13 @@ function countyTable() {
 
         let tableHeader = d3.select("#countyTableHeader").text(`${countySelected}`)
 
-        data.forEach(item => {
+        let stateData = data.filter(function(item){
+            return item.state == `${stateSelected}`;         
+            });
+            
+        stateData.forEach(item => {
 
-            if (item.state == stateSelected && item.county == countySelected) {
+            if (item.county == countySelected) {
 
                 countyRow.append('td').text((item.date).toLocaleString('en-US').slice(0, 16))
                 countyRow.append('td').text((item.population_estimate).toLocaleString('en-US'))
