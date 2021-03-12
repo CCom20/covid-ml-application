@@ -14,7 +14,12 @@ h2 {
 
 /* Google Calendar Chart */
 #calendarChart {
-    height: 400px;
+    height: 500px;
+}
+
+/* DAILY CASES */
+#dailyCases {
+    height: 500px;
 }
 
 /* US CASES MAP */

@@ -54,7 +54,6 @@ function atAGlance(){
         // Insert Information
         d3.select('#stateVaccinated').text(`${topVaccState} leads the way with ${topVaccinated}% of their population vaccinated.`)
         d3.select('#stateCases').text(`Currently, ${stateCases} has the most cases at ${stateCasesNum.toLocaleString('en-US')}.`)
-        d3.select('#estImmune').text(`${stateImmune} leads the way with and estimated ${stateImmuneNum}% immune.`)
    
     });
 }; 
@@ -143,29 +142,27 @@ function usImmunityChart(){
         else if (immuneFilter === '6-Month Immunity') {
             var immuneData = data.map((item) => item.six_month_immunity)
         }
-
-        // console.log(data.map((item) => item.three_month_immunity));
         
         var trace1 = {
-            x: data.map(d => d.date),
+            x: data.map(d => (d.date).slice(0, 12)),
             y: immuneData,
             type: 'bar',
             marker: {
                 color: '#0D527C', 
             },
         };
-
-        console.log(trace1); 
     
         var estImmunityData = [trace1];
     
         var layout = {
             title: `U.S. Daily Cases`,
             xaxis: {
-                title: 'Date'
+                title: 'Date',
+                automargin: true,
               },
             yaxis: {
-            title: 'Total Cases'
+            title: 'Total Cases',
+            automargin: true,
             }
           };
 
@@ -176,7 +173,51 @@ function usImmunityChart(){
     });
 };
 
-usImmunityChart(); 
+usImmunityChart();
+
+// 30 DAY PREDICTIONS
+predictions = "https://ccomstock-covid-dashboard.herokuapp.com/v2/thirty-day-prediction"
+
+function predictionsChart() {
+
+    d3.json(predictions, function(data) {
+
+        console.log(data);
+
+        let dates = data.map(item => (item.date).slice(0, 12));
+
+        var trace1 = {
+            x: dates,
+            y: data.map((item) => item.predicted_cases),
+            type: 'lines+markers',
+            mode: 'lines+markers',
+            marker: {
+                color: '#0D527C', 
+            },
+        };
+    
+        var timeSeriesData = [trace1];
+    
+        var layout = {
+            title: `Predictions for the Next 30 Days`,
+            xaxis: {
+                title: 'Date',
+                automargin: true,
+              },
+            yaxis: {
+            title: 'Total Cases'
+            }
+          };
+
+        var config = {responsive: true}
+    
+        Plotly.newPlot('predictedCases', timeSeriesData, layout, config);
+
+    });
+
+};
+
+predictionsChart();
 
 // US DAILY CASES CHART
 
@@ -184,10 +225,10 @@ function usDailyCasesSeries() {
 
     d3.json(stateData, function(data) {
 
-        // console.log(data);
+        let dates = data.map(item => (item.date).slice(0, 12));
 
         var trace1 = {
-            x: data.map((item) => ((item.date).toLocaleString('en-US'))),
+            x: dates,
             y: data.map((item) => item.daily_new_cases),
             type: 'bar',
             marker: {
@@ -200,7 +241,8 @@ function usDailyCasesSeries() {
         var layout = {
             title: `U.S. Daily Cases`,
             xaxis: {
-                title: 'Date'
+                title: 'Date',
+                automargin: true,
               },
             yaxis: {
             title: 'Total Cases'
@@ -228,7 +270,7 @@ function usDailyCases(){
             
             if (item.daily_new_cases > usCases) {
                 usCases = item.daily_new_cases; 
-                worstDate = item.date;
+                worstDate = (item.date).slice(0, 16);
             }
         });
 
@@ -244,9 +286,10 @@ usDailyCases();
 let table = d3.select("#covidTable").select("tbody")
 let stateFilter = d3.select("#stateFilter")
 
+let stateOverview = "https://ccomstock-covid-dashboard.herokuapp.com/v2/state-overview"
 // STATE DRILLDOWN ---- LINE CHART
 function stateLineChart(){
-    d3.json(nytData, function(data){
+    d3.json(stateOverview, function(data){
 
         stateFilter.on("change", stateLineChart); 
 
