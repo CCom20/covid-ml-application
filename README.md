@@ -4,9 +4,15 @@
 
 ## Analysis
 
-**Bottom-line Up Front**: We will likely see another spike in cases in the coming months unless more people get vaccinated and restrictions are kept in place.
+**Bottom-line Up Front**: The three-month natural immunity is falling, and the six-month natural immunity is leveling. A continued vaccination effort, along with COVID restrictions, is needed to ensure total immunity is pushed higher. 
 
-If immunity for those infected is three months, then we are trending down in immunity at this time. If immunity is six months, we are starting to level off at this time. These estimates include those vaccinated. I suspect that we will see another spike in cases in the coming months. This is because immunity for those who were infected prior to vaccine distributions will no longer be immune, and more states are beginning to relax restrictions and lift mask mandates.
+If immunity for those infected is three months, then we are trending down in natural immunity at this time. We would have peaked in natural immunity sometime in mid-to-late February, possibly explaining why we are seeing cases trend down at the beginning of March.
+
+If natural immunity is six months, we are starting to level off at this time, and we can expect a downward trend in natural immunity soon.
+
+When we add those who are fully vaccinated (i.e., people who have received both doses of the vaccine), we are still trending up in estimated total immune. This is encouraging, but only puts us at 15-20% of the population immune to COVID-19. 
+
+Now is not the time to relax restrictions. However, such relaxtions could be appropriate sometime over the summer. 
 
 **To-Do List / Improvement List**
 - [x] Automate file retrieval, cleaning, uploading to RDS with Keys
