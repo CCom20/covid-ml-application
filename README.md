@@ -10,7 +10,7 @@ If immunity for those infected is three months, then we are trending down in nat
 
 If natural immunity is six months, we are starting to level off at this time, and we can expect a downward trend in natural immunity soon.
 
-When we add those who are fully vaccinated (i.e., people who have received both doses of the vaccine), we are still trending up in estimated total immune. This is encouraging, but only puts us at 15-20% of the population immune to COVID-19. 
+When we add those who are fully vaccinated (i.e., people who have received both doses of the vaccine), we are still trending up in estimated total immune. This is encouraging, but only puts us at 15-17% of the population immune to COVID-19. 
 
 Now is not the time to relax restrictions. However, such relaxtions could be appropriate sometime over the summer. 
 
