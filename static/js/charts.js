@@ -428,7 +428,7 @@ function stateScatter() {
                     type: 'scatter',
                     name: 'Team A',
                     text: stateData.map(item => item.county),
-                    marker: { size: 12 }
+                    marker: { size: 7 }
                 };
                     
                   
