@@ -6,7 +6,7 @@ function atAGlance(){
 
     d3.json(covidData, function(data) {
 
-        let state_vaccinated = data.map(item => [item.state, item.percent_vaccinated]);
+        let state_vaccinated = data.map(item => [item.state, item.doses_administered_per_100k]);
         let state_cases = data.map(item => [item.state, item.cases]);
         let state_immune = data.map(item => [item.state, item.est_percent_immune]);
 
@@ -49,7 +49,7 @@ function atAGlance(){
         });
 
         // Insert Information
-        d3.select('#stateVaccinated').text(`${topVaccState} leads the way with ${topVaccinated}% of their population vaccinated.`)
+        d3.select('#stateVaccinated').text(`${topVaccState} leads the way with ${topVaccinated.toLocaleString('en-US')} per 100,000 vaccinated.`)
         d3.select('#stateCases').text(`Currently, ${stateCases} has the most cases at ${stateCasesNum.toLocaleString('en-US')}.`)
    
     });
@@ -73,8 +73,8 @@ function usCasesMap(){
         else if (mapFilter === 'Deaths') {
             var mapData = data.map((item) => item.deaths)
         }
-        else if (mapFilter === 'Percent Vaccinated') {
-            var mapData = data.map((item) => item.percent_vaccinated)
+        else if (mapFilter === 'Doses Administered per 100k') {
+            var mapData = data.map((item) => item.doses_administered_per_100k)
         }
         else if (mapFilter === 'Vaccines Administered') {
             var mapData = data.map((item) => item.total_administered)
@@ -152,7 +152,7 @@ function usImmunityChart(){
         var estImmunityData = [trace1];
     
         var layout = {
-            title: `U.S. Daily Cases`,
+            title: `U.S. Immunity Estimations by Day`,
             xaxis: {
                 title: 'Date',
                 automargin: true,
