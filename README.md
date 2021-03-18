@@ -1,6 +1,7 @@
 # U.S. COVID-19 Dashboard
 
 > *This project builds upon my previous U.S. COVID Response Dashboard. It utilizes machine learning to predict cases for counties that are missing from datasets, and there is a SARIMA model to predict 30-days of daily new COVID cases since the latest datapoint.*
+> 
 > Deployed dashboard: https://ccom20.github.io/covid-ml-application/ (Might take a minute to load.)
 
 ## Analysis
