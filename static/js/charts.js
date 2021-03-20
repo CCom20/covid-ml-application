@@ -179,8 +179,6 @@ function predictionsChart() {
 
     d3.json(predictions, function(data) {
 
-        console.log(data);
-
         let dates = data.map(item => (item.date).slice(0, 12));
 
         var trace1 = {
@@ -419,11 +417,9 @@ function stateScatter() {
 
         let x = stateData.map(item => item.median_household_income);
 
-        // console.log(x);
-
         var trace1 = {
                     x: stateData.map(item => item.median_household_income),
-                    y: stateData.map(item => item.cases),
+                    y: stateData.map(item => item.cases_per_100k),
                     mode: 'markers',
                     type: 'scatter',
                     name: 'Team A',
@@ -435,7 +431,13 @@ function stateScatter() {
         var data = [ trace1 ];
         
         var layout = {
-            title:'Median Household Income and Cases by County'
+            title:'Median Household Income and Cases by County',
+            xaxis: {
+                title: "Median Household Income",
+            },
+            yaxis: {
+                title: "Cases per 100,000",
+            }
         };
           
         Plotly.newPlot('stateScatterPlot', data, layout);
