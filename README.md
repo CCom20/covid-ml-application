@@ -40,7 +40,7 @@ This mainly looks to grab files and scrape tables rather than manually downloadi
 
 **Read Data from API**
 
-The API can be found here: (https://ccomstock-covid-dashboard.herokuapp.com/)[https://ccomstock-covid-dashboard.herokuapp.com/]. Not all data provided in the API is used for the dashboard. There was some data that ended up being cross-correlated which needed to be discarded for the machine learning models. Nevertheless, it's still provided in the API in case anyone would like to use it for other analyses.
+The API can be found here: https://ccomstock-covid-dashboard.herokuapp.com/. Not all data provided in the API is used for the dashboard. There was some data that ended up being cross-correlated which needed to be discarded for the machine learning models. Nevertheless, it's still provided in the API in case anyone would like to use it for other analyses.
 
 **Update Dashboard with Visualizations**
 
